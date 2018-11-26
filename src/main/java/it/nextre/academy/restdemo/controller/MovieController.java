@@ -3,8 +3,10 @@ package it.nextre.academy.restdemo.controller;
 import it.nextre.academy.restdemo.entity.Movie;
 import it.nextre.academy.restdemo.exception.MovieException;
 import it.nextre.academy.restdemo.service.MovieService;
+import it.nextre.academy.restdemo.structure.RispostaJson;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +19,21 @@ import java.util.List;
 @RequestMapping("/movie")
 public class MovieController {
 
+    private final Logger log = LogManager.getLogger(this.getClass());
+
     @Autowired
     MovieService movieService;
 
     //@RequestMapping(name="/", method = RequestMethod.GET)
     @GetMapping("/")
-    List<Movie> getTutti() {
-        return movieService.getAll();
+    ResponseEntity<RispostaJson> getTutti() {
+        log.debug("Sono in getTutti...");
+        List<Movie> films = movieService.getAll();
+        RispostaJson risp = new RispostaJson();
+        risp.setStato(100);
+        risp.setMessaggio("success");
+        risp.setResponse(films);
+        return new ResponseEntity(risp,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
