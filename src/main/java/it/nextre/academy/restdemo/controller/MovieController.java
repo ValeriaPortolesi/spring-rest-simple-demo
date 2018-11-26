@@ -25,7 +25,7 @@ public class MovieController {
     MovieService movieService;
 
     //@RequestMapping(name="/", method = RequestMethod.GET)
-    @GetMapping("/")
+    @GetMapping({"/"})
     ResponseEntity<RispostaJson> getTutti() {
         log.debug("Sono in getTutti...");
         List<Movie> films = movieService.getAll();
@@ -35,6 +35,8 @@ public class MovieController {
         risp.setResponse(films);
         return new ResponseEntity(risp,HttpStatus.OK);
     }
+
+
 
     @GetMapping("/{id}")
     Movie getByID(@PathVariable("id") int mid) {
